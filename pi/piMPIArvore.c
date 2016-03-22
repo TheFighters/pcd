@@ -6,7 +6,7 @@
 #include <mpi.h>
 #include <stdbool.h>
 
-//mpicc -g -Wall -o piMPIArvore piMPIArvore.c -std=gnu99 -lm &&  mpiexec -n 8 ./piMPIArvore
+//mpicc -g -Wall -o piMPI piMPI.c -std=gnu99 -lm &&  mpiexec -n 8 ./piMPI
 
 int main(void) {
 		int my_rank, comm_sz, n = 10000000, local_hit, local_n, local_divisor, local_dif, local_length;
@@ -64,3 +64,9 @@ int main(void) {
 
    return 0;
 } /*  main  */
+
+
+
+
+
+
