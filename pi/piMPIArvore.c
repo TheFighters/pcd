@@ -23,7 +23,7 @@ int main(void) {
 		MPI_Comm_size(MPI_COMM_WORLD, &comm_sz);
 
 		local_n = n/comm_sz;
-
+git 
 		double x,y;
 		local_hit = 0;
 		local_sent = false;
