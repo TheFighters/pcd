@@ -9,7 +9,8 @@
 //mpicc -g -Wall -o piMPI piMPI.c -std=gnu99 -lm &&  mpiexec -n 8 ./piMPI
 
 int main(void) {
-		int my_rank, comm_sz, n = 10000000, local_hit, local_n, local_divisor, local_dif, local_length;
+		int my_rank, comm_sz, n = 100000000, local_hit, local_n, local_divisor, local_dif, local_length;
+		unsigned int my_seed;
 		bool local_sent;  
 
 		/* Let the system do what it needs to start up MPI */
@@ -29,10 +30,11 @@ int main(void) {
 		local_divisor = 2;
 		local_dif = 1;
 		local_length = 0;
-		srand((unsigned)time(NULL)+my_rank*1000);
+		my_seed = my_rank + (unsigned)time(NULL);
 		for (int i = 0; i < local_n; i++){
-			x = (double)rand()/(double)(unsigned)RAND_MAX;
-			y = (double)rand()/(double)(unsigned)RAND_MAX;
+			x = (double)rand_r(&my_seed)/(double)(unsigned)RAND_MAX;
+			y = (double)rand_r(&my_seed)/(double)(unsigned)RAND_MAX;
+			//printf("x: %f, y: %f\n", x, y);
 
 			if (sqrt(pow(x-0.5,2)+pow(y-0.5,2)) < 0.5)
 			local_hit++;
