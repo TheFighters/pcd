@@ -9,9 +9,11 @@
 //mpicc -g -Wall -o piMPI piMPI.c -std=gnu99 -lm &&  mpiexec -n 8 ./piMPI
 
 int main(void) {
-		int my_rank, comm_sz, n = 100000000, local_hit, local_n, local_divisor, local_dif, local_length;
+		long long int n = 10000000, local_hit, local_n, local_divisor, local_dif, local_length, rec_hit;
+		int comm_sz, my_rank;
 		unsigned int my_seed;
-		bool local_sent;  
+		bool local_sent;
+		double x,y;
 
 		/* Let the system do what it needs to start up MPI */
 		MPI_Init(NULL, NULL);
@@ -23,13 +25,12 @@ int main(void) {
 		MPI_Comm_size(MPI_COMM_WORLD, &comm_sz);
 
 		local_n = n/comm_sz;
-git 
-		double x,y;
 		local_hit = 0;
 		local_sent = false;
 		local_divisor = 2;
 		local_dif = 1;
 		local_length = 0;
+		rec_hit = 0;
 		my_seed = my_rank + (unsigned)time(NULL);
 		for (int i = 0; i < local_n; i++){
 			x = (double)rand_r(&my_seed)/(double)(unsigned)RAND_MAX;
@@ -39,16 +40,23 @@ git
 			if (sqrt(pow(x-0.5,2)+pow(y-0.5,2)) < 0.5)
 			local_hit++;
 		}
-		while(!local_sent && local_length < log(comm_sz)/log(2)){
+
+		while(!local_sent && local_length <= local_dif){
 			if(my_rank % local_divisor == local_dif){
-				MPI_Send(&local_hit, 1, MPI_INT, my_rank-local_dif, 0, 
-            MPI_COMM_WORLD);
-				local_sent = true;
+				if ((my_rank - local_dif) < comm_sz){
+					//printf("%d mandou %d para %d\n", my_rank, local_hit, my_rank - local_dif);
+					MPI_Send(&local_hit, 1, MPI_INT, my_rank-local_dif, 0, 
+		          MPI_COMM_WORLD);
+					local_sent = true;
+				}
 			}
 			else {
-				MPI_Recv(&local_hit, 1, MPI_INT, my_rank+local_dif, 0,
-            MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-				local_hit += local_hit;
+				if ((my_rank + local_dif) < comm_sz){
+					//printf("%d recebeu %d de %d\n", my_rank, local_hit, my_rank + local_dif);
+					MPI_Recv(&rec_hit, 1, MPI_INT, my_rank+local_dif, 0,
+		          MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+					local_hit += rec_hit;
+				}
 			}
 			local_divisor *= 2;
 			local_dif *= 2;
