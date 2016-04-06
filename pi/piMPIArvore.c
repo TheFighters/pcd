@@ -9,6 +9,7 @@
 //mpicc -g -Wall -o piMPIArvore piMPIArvore.c -std=gnu99 -lm &&  mpiexec -n 8 ./piMPIArvore
 
 int main(void) {
+		double oldTime = MPI_Wtime();
 		long long int n = 10000000, local_hit, local_n, local_divisor, local_dif, local_length, rec_hit;
 		int comm_sz, my_rank;
 		unsigned int my_seed;
@@ -70,6 +71,7 @@ int main(void) {
    /* Print the result */
    if (my_rank == 0) {
       printf("pi: %f \n", (float)4*local_hit/n);
+      printf("Time: %f\n", MPI_Wtime() - oldTime);
    }
 
    /* Shut down MPI */
