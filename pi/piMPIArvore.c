@@ -41,11 +41,14 @@ int main(void) {
 			local_hit++;
 		}
 
-		while(!local_sent && local_length < log(comm_sz)/log(2)){
+		// nivel final da arvore
+		int end_level = log(comm_sz)/log(2);
+
+		while(!local_sent && local_length < end_level){
 			if(my_rank % local_divisor == local_dif){
 				if ((my_rank - local_dif) < comm_sz){
 					//printf("%d mandou %d para %d\n", my_rank, local_hit, my_rank - local_dif);
-					MPI_Send(&local_hit, 1, MPI_INT, my_rank-local_dif, 0, 
+					MPI_Send(&local_hit, 1, MPI_LONG_LONG_INT, my_rank-local_dif, 0, 
 		          MPI_COMM_WORLD);
 					local_sent = true;
 				}
@@ -53,7 +56,7 @@ int main(void) {
 			else {
 				if ((my_rank + local_dif) < comm_sz){
 					//printf("%d recebeu %d de %d\n", my_rank, local_hit, my_rank + local_dif);
-					MPI_Recv(&rec_hit, 1, MPI_INT, my_rank+local_dif, 0,
+					MPI_Recv(&rec_hit, 1, MPI_LONG_LONG_INT, my_rank+local_dif, 0,
 		          MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 					local_hit += rec_hit;
 				}
