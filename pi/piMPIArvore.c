@@ -9,8 +9,7 @@
 //mpicc -g -Wall -o piMPIArvore piMPIArvore.c -std=gnu99 -lm &&  mpiexec -n 8 ./piMPIArvore
 
 int main(void) {
-		double oldTime = MPI_Wtime();
-		long long int n = 10000000, local_hit, local_n, local_divisor, local_dif, local_length, rec_hit;
+		long long int n = 100000000, local_hit, local_n, local_divisor, local_dif, local_length, rec_hit;
 		int comm_sz, my_rank;
 		unsigned int my_seed;
 		bool local_sent;
@@ -18,6 +17,7 @@ int main(void) {
 
 		/* Let the system do what it needs to start up MPI */
 		MPI_Init(NULL, NULL);
+		double oldTime = MPI_Wtime();
 
 		/* Get my process rank */
 		MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);

@@ -9,13 +9,14 @@
 //mpicc -g -Wall -o piMPIArvore piMPIArvore.c -std=gnu99 -lm &&  mpiexec -n 8 ./piMPIArvore
 
 int main(void) {
-	long long int n = 10000000, local_hit, local_n, total_hit;
+	long long int n = 100000000, local_hit, local_n, total_hit;
 	int comm_sz, my_rank;
 	unsigned int my_seed;
 	double x, y;
 
 	/* Let the system do what it needs to start up MPI */
 	MPI_Init(NULL, NULL);
+	double oldTime = MPI_Wtime();
 
 	/* Get my process rank */
 	MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
@@ -42,6 +43,7 @@ int main(void) {
 	/* Print the result */
 	if (my_rank == 0) {
 		printf("pi: %f \n", (float)4 * total_hit / n);
+		printf("Time: %f\n", MPI_Wtime() - oldTime);
 	}
 
 	/* Shut down MPI */
