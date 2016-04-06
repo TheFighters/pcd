@@ -6,7 +6,7 @@
 #include <mpi.h>
 #include <stdbool.h>
 
-//mpicc -g -Wall -o piMPI piMPI.c -std=gnu99 -lm &&  mpiexec -n 8 ./piMPI
+//mpicc -g -Wall -o piMPIArvore piMPIArvore.c -std=gnu99 -lm &&  mpiexec -n 8 ./piMPIArvore
 
 int main(void) {
 		long long int n = 10000000, local_hit, local_n, local_divisor, local_dif, local_length, rec_hit;
@@ -31,7 +31,7 @@ int main(void) {
 		local_dif = 1;
 		local_length = 0;
 		rec_hit = 0;
-		my_seed = my_rank + (unsigned)time(NULL);
+		my_seed = my_rank*(unsigned)time(NULL);
 		for (int i = 0; i < local_n; i++){
 			x = (double)rand_r(&my_seed)/(double)(unsigned)RAND_MAX;
 			y = (double)rand_r(&my_seed)/(double)(unsigned)RAND_MAX;
@@ -41,7 +41,7 @@ int main(void) {
 			local_hit++;
 		}
 
-		while(!local_sent && local_length <= local_dif){
+		while(!local_sent && local_length < log(comm_sz)/log(2)){
 			if(my_rank % local_divisor == local_dif){
 				if ((my_rank - local_dif) < comm_sz){
 					//printf("%d mandou %d para %d\n", my_rank, local_hit, my_rank - local_dif);
