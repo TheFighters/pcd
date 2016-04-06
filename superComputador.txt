@@ -1,0 +1,30 @@
+//mpicc -g -Wall -o piMPI piMPI.c -std=gnu99 -lm &&  mpiexec -n 8 ./piMPI
+//dca - ssh -p 4422 m20150145987@10.7.32.67
+//nao dca - ssh -p 4422 m20150145987@177.20.47.185
+
+//sinfo
+//squeue
+
+/*
+script
+
+#!/bin/bash
+#SBATCH --job-name=piMPIArvore
+#SBATCH --nodes=4
+#SBATCH --ntasks-per-node=32
+
+$run -n 16 ./piMPIArvore
+#srun -n 16 hostname
+*/
+
+/*
+Comando enfileirar o script
+
+sbatch nomeScript.script
+*/
+
+/*
+slurm: gerenciador de recursos
+pegar a saída
+cat slurm-numeroQueSaiuDoSbatch
+*/
