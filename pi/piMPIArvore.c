@@ -41,6 +41,7 @@ int main(void) {
 			local_hit++;
 		}
 
+		while(!local_sent && local_length <= local_dif){
 		while(!local_sent && local_length < log(comm_sz)/log(2)){
 			if(my_rank % local_divisor == local_dif){
 				if ((my_rank - local_dif) < comm_sz){
