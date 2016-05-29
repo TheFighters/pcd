@@ -9,7 +9,8 @@
 //mpicc -g -Wall -o piMPI piMPI.c -std=gnu99 -lm &&  mpiexec -n 8 ./piMPI
 
 int main(void) {
-		int my_rank, comm_sz, n = 100000000, local_hit, local_n, local_divisor, local_dif, local_length;
+		int my_rank, comm_sz, local_hit, local_n, local_divisor, local_dif, local_length;
+		long long int  n = 2000000000;
 		unsigned int my_seed;
 		bool local_sent;  
 
@@ -23,7 +24,6 @@ int main(void) {
 		MPI_Comm_size(MPI_COMM_WORLD, &comm_sz);
 
 		local_n = n/comm_sz;
-git 
 		double x,y;
 		local_hit = 0;
 		local_sent = false;
